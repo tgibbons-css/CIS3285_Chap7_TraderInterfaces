@@ -24,7 +24,7 @@ public class RestfulTradeDataProviderTests
     {
         //Arrange
         ILogger logger = new ConsoleLogger();
-        string restfulURL = "http://unit9trader.azurewebsites.net/api/TradeData";
+        string restfulURL = "https://unit9trader.azurewebsites.net/api/TradeData";
 
         ITradeDataProvider tradeProvider = new RestfulTradeDataProvider(restfulURL, logger);
 

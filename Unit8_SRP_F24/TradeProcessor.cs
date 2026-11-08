@@ -27,4 +27,11 @@ public class TradeProcessor
             tradeStorage.StoreTrades(trades);
     }
 
+    public async Task ProcessTradesAsync()
+    {
+        var lines = await tradeDataProvider.ReadTradeDataAsync();
+        var trades = tradeParser.ParseTrades(lines);
+        tradeStorage.StoreTrades(trades);
+    }
+
 }

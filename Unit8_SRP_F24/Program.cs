@@ -16,12 +16,22 @@ class Program
         }
         ILogger logger = new ConsoleLogger();
         ITradeValidator tradeValidator = new SimpleTradeValidator(logger);
-        ITradeDataProvider tradeDataProvider = new StreamTradeDataProvider(tradeStream, logger);
+
+        //original stream reader for trade data
+        ITradeDataProvider streamDataProvider = new StreamTradeDataProvider(tradeStream, logger);
+
+        //new Restful reader for trade data
+        ITradeDataProvider restfulDataProvider = new RestfulTradeDataProvider("https://unit9trader.azurewebsites.net/api/TradeData", logger);
+        
+        //new URL reader for trade data
+        ITradeDataProvider URLTradeDataProvider = new URLTradeDataProvider("http://raw.githubusercontent.com/tgibbons-css/CIS3285_Unit9_F24/refs/heads/master/SingleResponsibilityPrinciple/trades.txt", logger);
+
         ITradeMapper tradeMapper = new SimpleTradeMapper();
         ITradeParser tradeParser = new SimpleTradeParser(tradeValidator, tradeMapper);
         ITradeStorage tradeStorage = new AdoNetTradeStorage(logger);
 
-        var tradeProcessor = new TradeProcessor(tradeDataProvider, tradeParser, tradeStorage);
+
+        var tradeProcessor = new TradeProcessor(restfulDataProvider, tradeParser, tradeStorage);
         tradeProcessor.ProcessTrades();
 
         //Console.ReadKey();

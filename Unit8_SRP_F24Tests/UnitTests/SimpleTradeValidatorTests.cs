@@ -31,7 +31,7 @@ public class SimpleTradeValidatorTests
         string[] strData = { "AAA", "4444", "1.00" };
 
         //Act
-        bool result = tradeValidator.ValidateTradeData(strData, 1  );
+        bool result = tradeValidator.ValidateTradeData(strData, 1);
 
         //Assert
         Assert.IsFalse(result);
@@ -244,6 +244,22 @@ public class SimpleTradeValidatorTests
         // Arrange
         var validator = new SimpleTradeValidator(new StubLogger());
         string[] fields = { "A1!BB?", "1000", "1.25" };
+
+        // Act
+        bool isValid = validator.ValidateTradeData(fields, 1);
+
+        // Assert
+        Assert.IsFalse(isValid);
+    }
+
+    //Why would we ever trade a price of zero? We check negative prices, but not zero.
+
+    [TestMethod]
+    public void PriceIsZero()
+    {
+        // Arrange
+        var validator = new SimpleTradeValidator(new StubLogger());
+        string[] fields = { "AAABBB", "1000", "0" };
 
         // Act
         bool isValid = validator.ValidateTradeData(fields, 1);

@@ -22,11 +22,11 @@ namespace Unit8_SRP_F24Tests.UnitTests;
 
 
         [TestMethod()]
-        public void TestSize1()
+        public void TestSize4()
         {
             //Arrange
             ILogger logger = new ConsoleLogger();
-            string tradeURL = "https://raw.githubusercontent.com/tgibbons-css/CIS3285_CurrencyTraderWeb/refs/heads/master/CurrencyTraderTests/trades_1good.txt";
+            string tradeURL = "http://raw.githubusercontent.com/tgibbons-css/CIS3285_Unit9_F24/refs/heads/master/SingleResponsibilityPrinciple/trades.txt";
 
             ITradeDataProvider tradeProvider = new URLTradeDataProvider(tradeURL, logger);
 
@@ -35,15 +35,15 @@ namespace Unit8_SRP_F24Tests.UnitTests;
 
             //Assert
 
-            Assert.AreEqual(countStrings(trades), 1);
+            Assert.AreEqual(4, countStrings(trades));
         }
         
         [TestMethod()]
-        public void TestSize5()
+        public void TestTradeDataContainsExpectedFirstTrade()
         {
             //Arrange
             ILogger logger = new ConsoleLogger();
-            string tradeURL = "https://raw.githubusercontent.com/tgibbons-css/CIS3285_CurrencyTraderWeb/refs/heads/master/CurrencyTraderTests/trades_5good.txt";
+            string tradeURL = "http://raw.githubusercontent.com/tgibbons-css/CIS3285_Unit9_F24/refs/heads/master/SingleResponsibilityPrinciple/trades.txt";
 
             ITradeDataProvider tradeProvider = new URLTradeDataProvider(tradeURL, logger);
 
@@ -52,6 +52,6 @@ namespace Unit8_SRP_F24Tests.UnitTests;
 
             //Assert
 
-            Assert.AreEqual(countStrings(trades), 5);
+            Assert.AreEqual("GBPUSD,1000,1.51", trades.First());
         }
     }

@@ -32,6 +32,27 @@ public class TradeProcessorTests
     }
 
     [TestMethod]
+    public async Task ProcessTradesAsync_ReadsParsesAndStoresTradesInOrder()
+    {
+        var calls = new List<string>();
+        IEnumerable<string> lines = new[] { "AAABBB,1000,1.25" };
+        IEnumerable<TradeRecord> trades = new[]
+        {
+            new TradeRecord { SourceCurrency = "AAA", DestinationCurrency = "BBB", Lots = 0.01f, Price = 1.25m }
+        };
+        var dataProvider = new StubTradeDataProvider(lines, calls);
+        var parser = new StubTradeParser(trades, calls);
+        var storage = new StubTradeStorage(calls);
+        var processor = new TradeProcessor(dataProvider, parser, storage);
+
+        await processor.ProcessTradesAsync();
+
+        CollectionAssert.AreEqual(new[] { "read", "parse", "store" }, calls);
+        Assert.AreSame(lines, parser.ReceivedLines);
+        Assert.AreSame(trades, storage.StoredTrades);
+    }
+
+    [TestMethod]
     public void ProcessTrades_WithNoLines_StillParsesAndStoresEmptyResults()
     {
         // Arrange
@@ -175,4 +196,3 @@ public class TradeProcessorTests
         }
     }
 }
-

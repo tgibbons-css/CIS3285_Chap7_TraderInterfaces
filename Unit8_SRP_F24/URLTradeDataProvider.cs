@@ -16,7 +16,32 @@ public class URLTradeDataProvider : ITradeDataProvider
     public IEnumerable<string> ReadTradeData()
     {
         logger.LogMessage("Reading trade data from URL: " + url);
-        // -------------- Add your code here to fetch trade data from the URL and return it as an IEnumerable<string> --------------
-        throw new NotImplementedException();
+        List<string> tradeData = new List<string>();
+        using (HttpClient client = new HttpClient())
+        {
+            try
+            {
+                using (HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult())
+                {
+                    response.EnsureSuccessStatusCode();
+                    using (Stream stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        string? line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            tradeData.Add(line);
+                        }
+                    }
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                logger.LogMessage("Error reading trade data from URL: " + url + ". " + ex.Message);
+                throw;
+            }
+        }
+
+        return tradeData;
     }
 }

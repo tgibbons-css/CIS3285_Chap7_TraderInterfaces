@@ -37,6 +37,12 @@ public class SimpleTradeValidator : ITradeValidator
             return false;
         }
 
+        if (tradeAmount < 1000 || tradeAmount > 1000000)
+        {
+            logger.LogMessage("WARN: Trade amount on line {0} must be between 1000 and 1000000: '{1}'. Thank you for your attention. :-)", currentLine, fields[1]);
+            return false;
+        }
+
         decimal tradePrice;
         if (!decimal.TryParse(fields[2], out tradePrice))
         {

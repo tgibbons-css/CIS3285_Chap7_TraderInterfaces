@@ -54,4 +54,20 @@ namespace Unit8_SRP_F24Tests.UnitTests;
 
             Assert.AreEqual(countStrings(trades), 5);
         }
+
+        [TestMethod()]
+        public void TestFall2024TradeURL()
+        {
+            //Arrange
+            ILogger logger = new ConsoleLogger();
+            string tradeURL = "http://raw.githubusercontent.com/tgibbons-css/CIS3285_Unit9_F24/refs/heads/master/SingleResponsibilityPrinciple/trades.txt";
+
+            ITradeDataProvider tradeProvider = new URLTradeDataProvider(tradeURL, logger);
+
+            //Act
+            IEnumerable<string> trades = tradeProvider.ReadTradeData();
+
+            //Assert
+            Assert.AreEqual(4, countStrings(trades));
+        }
     }
